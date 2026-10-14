@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swans On The Lake</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#8FD8FF;
+    --sky-bottom:#FFF3B8;
+    --ink:#2B2250;
+    --ink-soft:#4C4270;
+    --card:#FFFFFF;
+    --sun:#FFC93C;
+    --sun-deep:#F5A623;
+    --coral:#FF5A3C;
+    --coral-deep:#D93F22;
+    --mint:#2FD68F;
+    --mint-deep:#18A86A;
+    --grape:#9B4DFF;
+    --grape-deep:#7A2FDB;
+    --sea:#1EA7F2;
+    --sea-deep:#0D7FC4;
+    --left-light:#FF5A3C;
+    --right-light:#9B4DFF;
+    --key-white:#FFFDF7;
+    --key-edge:#E9C79B;
+    --key-black:#3A2F66;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    font-family:'Nunito', sans-serif;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height:100vh;
+  }
+  #app{ width:100%; min-height:100vh; display:flex; flex-direction:column; }
+  .screen{ display:none; flex:1; flex-direction:column; }
+  .screen.active{ display:flex; animation: rise .4s cubic-bezier(.2,.7,.3,1); }
+  @keyframes rise{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform:none; } }
+
+  h1{ font-family:'Baloo 2', sans-serif; font-weight:800; font-size:2.8rem; letter-spacing:-0.01em; color: var(--coral-deep); text-shadow: 0 3px 0 #fff; line-height:1.1; }
+
+  /* ---------- Home ---------- */
+  #screen-home{ padding: 28px 20px 40px; max-width: 640px; margin:0 auto; width:100%; align-items:center; }
+  .home-header{ text-align:center; margin-bottom: 8px; }
+  .swan-pic{ width:100%; max-width:520px; border-radius:28px; border:5px solid #fff; box-shadow: 0 8px 0 rgba(43,34,80,.18); overflow:hidden; margin: 14px 0 26px; background:#fff; }
+  .swan-pic img{ display:block; width:100%; height:auto; }
+  .part-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; width:100%; max-width:520px; }
+  .part-btn{
+    font-family:'Baloo 2', sans-serif; font-weight:800; font-size:1.5rem; color:#fff;
+    border:none; border-radius:24px; padding: 18px 10px; cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .part-btn:active{ transform: translateY(5px); }
+  .part-btn.p1{ background: var(--coral);  box-shadow: 0 7px 0 var(--coral-deep); }
+  .part-btn.p2{ background: var(--sea);    box-shadow: 0 7px 0 var(--sea-deep); }
+  .part-btn.p3{ background: var(--mint);   box-shadow: 0 7px 0 var(--mint-deep); }
+  .part-btn.p4{ background: var(--grape);  box-shadow: 0 7px 0 var(--grape-deep); }
+  .part-btn:hover{ filter: brightness(1.07); }
+  .part-btn.p1:active{ box-shadow: 0 2px 0 var(--coral-deep); }
+  .part-btn.p2:active{ box-shadow: 0 2px 0 var(--sea-deep); }
+  .part-btn.p3:active{ box-shadow: 0 2px 0 var(--mint-deep); }
+  .part-btn.p4:active{ box-shadow: 0 2px 0 var(--grape-deep); }
+
+  /* ---------- Practice screen ---------- */
+  #screen-practice{ padding: 14px 14px 24px; max-width: 900px; margin:0 auto; width:100%; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 8px; }
+  .back-btn{ background:#fff; border:3px solid var(--sun); color: var(--coral-deep); font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1rem; border-radius:999px; padding:6px 16px; cursor:pointer; }
+  .back-btn:hover{ background:#FFF6D6; }
+  .title-wrap{ text-align:center; flex:1; }
+  .title-wrap .part-title{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.7rem; color: var(--coral-deep); text-shadow:0 2px 0 #fff; line-height:1.1; }
+  .step-dots{ display:flex; gap:6px; justify-content:center; margin-top:4px; flex-wrap:wrap; }
+  .dot{ width:14px; height:14px; border-radius:50%; background:#fff; border:3px solid var(--sun-deep); }
+  .dot.done{ background: var(--mint); border-color: var(--mint-deep); }
+  .dot.now{ background: var(--sun); transform: scale(1.3); }
+  .topbar .spacer{ width:92px; }
+
+  .step-label{ text-align:center; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.3rem; color: var(--ink); margin: 2px 0 8px; }
+
+  .play-row{ display:flex; justify-content:center; margin-bottom: 14px; }
+  .play-btn{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.4rem; color:#fff;
+    border:none; border-radius:999px; padding: 12px 34px; cursor:pointer;
+    display:flex; align-items:center; gap:10px;
+    background: var(--mint); box-shadow: 0 6px 0 var(--mint-deep);
+  }
+  .play-btn:active{ transform: translateY(4px); box-shadow: 0 2px 0 var(--mint-deep); }
+  .play-btn.stop{ background: var(--coral); box-shadow: 0 6px 0 var(--coral-deep); }
+  .play-btn.stop:active{ box-shadow: 0 2px 0 var(--coral-deep); }
+  .play-btn[disabled]{ opacity:.7; cursor:wait; }
+  .play-btn .icon{ width:22px; height:22px; display:block; }
+
+  .stage-box{ background: rgba(255,255,255,.55); border:4px solid #fff; border-radius:26px; padding: 14px 8px 6px; box-shadow: 0 6px 0 rgba(43,34,80,.14); }
+  #stage-scale{ width:100%; overflow:hidden; position:relative; }
+  #stage{ width:720px; position:relative; transform-origin: top left; }
+
+  /* keyboard (same construction as the Treble Clef Game) */
+  #keys{ position:relative; width:720px; height:200px; background: linear-gradient(180deg,#FFE9BE 0%,#FFD98F 100%); border-radius: 0 0 14px 14px; }
+  .pkey{ position:absolute; top:0; box-sizing:border-box; border-radius: 0 0 8px 8px; transition: background .06s ease, box-shadow .06s ease; }
+  .pkey.white{ width:58px; height:200px; background: linear-gradient(180deg, var(--key-white) 0%, #FBE9CF 100%); border:2px solid var(--key-edge); z-index:1; }
+  .pkey.black{ width:36px; height:122px; background: linear-gradient(180deg, #5C5182 0%, var(--key-black) 100%); border:2px solid #2E274A; z-index:2; }
+  .pkey.white.lit-L{ background: linear-gradient(180deg,#FF8A70 0%, var(--left-light) 100%); }
+  .pkey.white.lit-R{ background: linear-gradient(180deg,#C99AFF 0%, var(--right-light) 100%); }
+  .pkey.black.lit-L{ background: var(--left-light); }
+  .pkey.black.lit-R{ background: var(--right-light); }
+  .pkey.lit-L, .pkey.lit-R{ box-shadow: 0 0 18px 4px rgba(255,201,60,.9); }
+  .klabel{ position:absolute; bottom:8px; left:0; right:0; text-align:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:.95rem; color: var(--sun-deep); pointer-events:none; }
+
+  #hands{ display:block; width:720px; height:330px; margin-top:6px; overflow: visible; }
+  .hand-outline{ stroke:#2B2250; stroke-linecap:round; stroke-linejoin:round; }
+  .hand-skin{ stroke:#FFD9B3; stroke-linecap:round; stroke-linejoin:round; }
+  .finger{ opacity:0; color:#FF5A3C;  }
+  .finger line{ stroke:currentColor; stroke-width:36; stroke-linecap:butt; }
+  .finger circle{ fill:currentColor; }
+  .finger.lit-L{ opacity:1; color:var(--left-light); }
+  .finger.lit-R{ opacity:1; color:var(--right-light); }
+  .hand-tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:20px; fill: var(--ink-soft); text-anchor:middle; }
+
+  .bottom-row{ display:flex; align-items:center; justify-content:flex-end; gap:16px; margin-top:16px; flex-wrap:wrap; }
+  .practice-text{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.25rem; color: var(--ink); background:#fff; border:3px solid var(--sun); border-radius:18px; padding:8px 16px; }
+  .next-btn{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.2rem; color:#fff;
+    border:none; border-radius:999px; padding: 12px 28px; cursor:pointer;
+    background: var(--grape); box-shadow: 0 6px 0 var(--grape-deep);
+  }
+  .next-btn:hover{ filter:brightness(1.08); }
+  .next-btn:active{ transform: translateY(4px); box-shadow: 0 2px 0 var(--grape-deep); }
+  .next-btn.done{ background: var(--sun-deep); box-shadow: 0 6px 0 #C47F0E; color: var(--ink); }
+  .next-btn.done:active{ box-shadow: 0 2px 0 #C47F0E; }
+  .sound-note{ text-align:center; font-weight:700; font-size:.85rem; color: var(--ink-soft); margin-top:10px; min-height:1.2em; }
+
+  @media (max-width:520px){
+    h1{ font-size:2.1rem; }
+    .topbar .spacer{ display:none; }
+    .bottom-row{ justify-content:center; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HOME -->
+  <section id="screen-home" class="screen active">
+    <div class="home-header"><h1>Swans On The Lake</h1></div>
+
+    <div class="swan-pic">
+      <img src="swans.jpeg" alt="Two swans on a lake">
+    </div>
+
+    <div class="part-grid">
+      <button class="part-btn p1" data-part="1">Part 1</button>
+      <button class="part-btn p2" data-part="2">Part 2</button>
+      <button class="part-btn p3" data-part="3">Part 3</button>
+      <button class="part-btn p4" data-part="4">Part 4</button>
+    </div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="screen-practice" class="screen">
+    <div class="topbar">
+      <button class="back-btn" id="back-btn">&larr; Home</button>
+      <div class="title-wrap">
+        <div class="part-title" id="part-title">Part 1</div>
+        <div class="step-dots" id="step-dots"></div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    <div class="step-label" id="step-label">Step 1</div>
+
+    <div class="play-row">
+      <button class="play-btn" id="play-btn"></button>
+    </div>
+
+    <div class="stage-box">
+      <div id="stage-scale">
+        <div id="stage">
+          <div id="keys"></div>
+          <svg id="hands" viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="practice-text">Play this on the piano 10 times.</div>
+      <button class="next-btn" id="next-btn">Next step</button>
+    </div>
+    <div class="sound-note" id="sound-note"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ================= Music data =================
+  // Each hand is a list of [note, seconds]; all notes in a hand play one after another from t = 0.
+  var RH_PART1 = ['E4','G4','F4','E4','G4','F4','E4','G4','F4','E4','D4','C4'];
+  function rhOnes(list){ return list.map(function(n){ return [n,1]; }); }
+
+  var PARTS = {
+    1: { title:'Part 1', steps: [
+      { rh: rhOnes(RH_PART1.slice(0,3)),  lh: [['C3',3]] },
+      { rh: rhOnes(RH_PART1.slice(0,4)),  lh: [['C3',3],['G3',1]] },
+      { rh: rhOnes(RH_PART1.slice(0,6)),  lh: [['C3',3],['G3',3]] },
+      { rh: rhOnes(RH_PART1.slice(0,7)),  lh: [['C3',3],['G3',3],['C3',1]] },
+      { rh: rhOnes(RH_PART1.slice(0,9)),  lh: [['C3',3],['G3',3],['C3',3]] },
+      { rh: rhOnes(RH_PART1.slice(0,10)), lh: [['C3',3],['G3',3],['C3',3],['G3',1]] },
+      { rh: rhOnes(RH_PART1.slice(0,12)), lh: [['C3',3],['G3',3],['C3',3],['G3',3]] }
+    ]},
+    2: { title:'Part 2', steps: [
+      { rh: [['D4',3]],                                   lh: [['F3',1],['G3',1],['F3',1]] },
+      { rh: [['D4',3],['C4',1]],                          lh: [['F3',1],['G3',1],['F3',1],['E3',1]] },
+      { rh: [['D4',3],['C4',1],['E4',1],['G4',1]],        lh: [['F3',1],['G3',1],['F3',1],['E3',3]] }
+    ]},
+    3: { title:'Part 3', steps: [
+      { rh: [['D4',3]],                lh: [['F3',1],['G3',1],['F3',1]] },
+      { rh: [['D4',3],['C4',3]],       lh: [['F3',1],['G3',1],['F3',1],['E3',3]] }
+    ]},
+    4: { title:'Part 4', steps: [
+      { rh: rhOnes(['D4','E4','F4']),                          lh: [['G3',3]] },
+      { rh: rhOnes(['D4','E4','F4','D4']),                     lh: [['G3',3],['G3',1]] },
+      { rh: rhOnes(['D4','E4','F4','D4','E4','F4']),           lh: [['G3',3],['G3',3]] }
+    ]}
+  };
+
+  // ================= Keyboard (built like the Treble Clef Game: chromatic range -> white/black layout) =================
+  var NOTE_LETTERS = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+  function noteChromaticIndex(name){
+    var m = name.match(/^([A-G]#?)(\d)$/);
+    return parseInt(m[2], 10) * 12 + NOTE_LETTERS.indexOf(m[1]);
+  }
+  function buildChromaticRange(startNote, endNote){
+    var s = noteChromaticIndex(startNote), e = noteChromaticIndex(endNote), keys = [];
+    for(var i = s; i <= e; i++){
+      var letter = NOTE_LETTERS[i % 12];
+      keys.push({ name: letter + Math.floor(i / 12), letter: letter[0], type: letter.indexOf('#') >= 0 ? 'black' : 'white' });
+    }
+    return keys;
+  }
+  var WHITE_W = 58, WHITE_SPACING = 60, BLACK_W = 36, BLACK_OFFSET = 42;
+  function buildKeyboardLayout(chromatic){
+    var whiteX = 0, lastWhiteX = 0;
+    var laid = chromatic.map(function(k){
+      if(k.type === 'white'){
+        var pos = whiteX; lastWhiteX = whiteX; whiteX += WHITE_SPACING;
+        return { name:k.name, type:k.type, pos:pos, center:pos + WHITE_W/2 };
+      }
+      return { name:k.name, type:k.type, pos: lastWhiteX + BLACK_OFFSET, center: lastWhiteX + BLACK_OFFSET + BLACK_W/2 };
+    });
+    return { keys: laid, width: whiteX };
+  }
+  var LAYOUT = buildKeyboardLayout(buildChromaticRange('C3','G4'));   // 12 white keys = 720px
+  var KEY_POS = {};
+  LAYOUT.keys.forEach(function(k){ KEY_POS[k.name] = k; });
+
+  var keyEls = {};
+  function renderKeyboard(){
+    var wrap = document.getElementById('keys');
+    wrap.innerHTML = '';
+    var whites = LAYOUT.keys.filter(function(k){ return k.type === 'white'; });
+    var blacks = LAYOUT.keys.filter(function(k){ return k.type === 'black'; });
+    whites.concat(blacks).forEach(function(k){
+      var el = document.createElement('div');
+      el.className = 'pkey ' + k.type;
+      el.style.left = k.pos + 'px';
+      if(k.name === 'C3' || k.name === 'C4'){
+        var l = document.createElement('div'); l.className = 'klabel'; l.textContent = k.name; el.appendChild(l);
+      }
+      keyEls[k.name] = el;
+      wrap.appendChild(el);
+    });
+  }
+
+  // ================= Hands (SVG, outline-style back of hand, fingers lined up with keys) =================
+  // Drawn once in a "left hand" frame: pinky, ring, middle, index, thumb with fingertips 60px apart
+  // (same as the key spacing). The right hand is the same drawing flipped horizontally.
+  // Each finger has a lit overlay (knuckle -> fingertip only) so the palm never lights up.
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var FINGER_W = 36, OUTLINE = 4;
+  var FINGERS = [   // tip = fingertip centre, base = knuckle end
+    { name:'pinky',  tip:[  0, 92], base:[ 30,172] },
+    { name:'ring',   tip:[ 60, 46], base:[ 76,156] },
+    { name:'middle', tip:[120, 28], base:[124,150] },
+    { name:'index',  tip:[180, 48], base:[168,156] },
+    { name:'thumb',  tip:[240,162], base:[178,232], lit:[204,200] }
+  ];
+  var PALM_D = 'M10 166 L186 150 L214 218 C206 262 186 288 164 304 L76 304 C30 282 4 220 10 166 Z';
+  var fingerEls = {};   // note -> finger overlay element
+
+  function svgEl(tag, attrs){
+    var el = document.createElementNS(SVGNS, tag);
+    Object.keys(attrs).forEach(function(k){ el.setAttribute(k, attrs[k]); });
+    return el;
+  }
+
+  function drawHand(svg, side, notes, label){
+    // notes[i] is the key under FINGERS[i] (pinky, ring, middle, index, thumb)
+    var firstCx = KEY_POS[notes[0]].center;      // key under the pinky
+    var g = svgEl('g', { transform: side === 'L'
+        ? 'translate(' + firstCx + ',0)'
+        : 'translate(' + firstCx + ',0) scale(-1,1)' });
+
+    // 1) outline layer
+    g.appendChild(svgEl('path', { 'class':'hand-outline', d:PALM_D, 'stroke-width':OUTLINE * 2, fill:'#2B2250' }));
+    FINGERS.forEach(function(f){
+      g.appendChild(svgEl('line', { 'class':'hand-outline', x1:f.base[0], y1:f.base[1], x2:f.tip[0], y2:f.tip[1], 'stroke-width':FINGER_W + OUTLINE * 2 }));
+    });
+    // 2) skin layer
+    g.appendChild(svgEl('path', { 'class':'hand-skin', d:PALM_D, fill:'#FFD9B3', 'stroke-width':0 }));
+    FINGERS.forEach(function(f){
+      g.appendChild(svgEl('line', { 'class':'hand-skin', x1:f.base[0], y1:f.base[1], x2:f.tip[0], y2:f.tip[1], 'stroke-width':FINGER_W }));
+    });
+    // 3) lit overlays, one per finger (knuckle to fingertip)
+    FINGERS.forEach(function(f, i){
+      var fg = svgEl('g', { 'class':'finger' });
+      var lb = f.lit || f.base;
+      fg.appendChild(svgEl('line', { x1:lb[0], y1:lb[1], x2:f.tip[0], y2:f.tip[1] }));
+      fg.appendChild(svgEl('circle', { cx:f.tip[0], cy:f.tip[1], r:FINGER_W / 2 }));
+      g.appendChild(fg);
+      fingerEls[notes[i]] = fg;
+    });
+    svg.appendChild(g);
+
+    // label (not mirrored)
+    var cx = side === 'L' ? firstCx + 100 : firstCx - 100;
+    var t = svgEl('text', { 'class':'hand-tag', x:cx, y:262 });
+    t.textContent = label;
+    svg.appendChild(t);
+  }
+
+  function renderHands(){
+    var svg = document.getElementById('hands');
+    svg.innerHTML = '';
+    fingerEls = {};
+    // Left hand: pinky on C3, ring D3, middle E3, index F3, thumb G3
+    drawHand(svg, 'L', ['C3','D3','E3','F3','G3'], 'Left hand');
+    // Right hand (mirror image): pinky on G4, ring F4, middle E4, index D4, thumb C4
+    drawHand(svg, 'R', ['G4','F4','E4','D4','C4'], 'Right hand');
+  }
+
+  // ================= Sound: physical-instruments.js piano (loaded from npm via jsDelivr) =================
+  var LIB_URL = 'https://cdn.jsdelivr.net/npm/physical-instruments.js@0.1.1/dist/index.js';
+  var engine = null, track = null, fallbackCtx = null, enginePromise = null, usingFallback = false;
+
+  function noteToMidi(name){
+    var m = name.match(/^([A-G]#?)(\d)$/);
+    return (parseInt(m[2], 10) + 1) * 12 + NOTE_LETTERS.indexOf(m[1]);
+  }
+
+  function loadEngine(){
+    if(enginePromise) return enginePromise;
+    enginePromise = (async function(){
+      try{
+        var mod = await import(LIB_URL);
+        engine = await mod.createEngine();
+        await engine.ready;
+        track = engine.createTrack('piano', { gain: 1 });
+      }catch(err){
+        console.warn('physical-instruments.js could not load, using a simple built-in piano-ish sound instead.', err);
+        usingFallback = true;
+        fallbackCtx = new (window.AudioContext || window.webkitAudioContext)();
+        document.getElementById('sound-note').textContent =
+          'Could not load the piano library (are you online?). Using a simple backup sound instead.';
+      }
+    })();
+    return enginePromise;
+  }
+
+  var fallbackVoices = {};
+  function soundOn(note){
+    var midi = noteToMidi(note);
+    if(!usingFallback){
+      if(track) track.noteOn(midi, 100);
+      return;
+    }
+    if(fallbackCtx.state === 'suspended') fallbackCtx.resume();
+    var osc = fallbackCtx.createOscillator(), gain = fallbackCtx.createGain();
+    var now = fallbackCtx.currentTime;
+    osc.type = 'triangle';
+    osc.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.35, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.08, now + 1.2);
+    osc.connect(gain); gain.connect(fallbackCtx.destination);
+    osc.start();
+    (fallbackVoices[note] = fallbackVoices[note] || []).push({ osc:osc, gain:gain });
+  }
+  function soundOff(note){
+    var midi = noteToMidi(note);
+    if(!usingFallback){
+      if(track) track.noteOff(midi);
+      return;
+    }
+    var list = fallbackVoices[note];
+    if(!list || !list.length) return;
+    var v = list.shift();
+    var now = fallbackCtx.currentTime;
+    v.gain.gain.cancelScheduledValues(now);
+    v.gain.gain.setValueAtTime(Math.max(v.gain.gain.value, 0.0001), now);
+    v.gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+    v.osc.stop(now + 0.2);
+  }
+
+  // ================= Playback + lights =================
+  var player = { playing:false, timers:[], token:0, sounding:[] };
+  var GAP = 0.06;   // little release before a note's end so repeated notes re-strike and lights blink
+
+  function lightOn(note, hand){
+    var k = keyEls[note], f = fingerEls[note];
+    if(k) k.classList.add('lit-' + hand);
+    if(f) f.classList.add('lit-' + hand);
+  }
+  function lightOff(note){
+    var k = keyEls[note], f = fingerEls[note];
+    if(k) k.classList.remove('lit-L','lit-R');
+    if(f) f.classList.remove('lit-L','lit-R');
+  }
+
+  function buildEvents(step){
+    var events = [], total = 0;
+    [['L', step.lh], ['R', step.rh]].forEach(function(pair){
+      var t = 0;
+      pair[1].forEach(function(n){
+        events.push({ hand:pair[0], note:n[0], start:t, end:t + n[1] });
+        t += n[1];
+      });
+      if(t > total) total = t;
+    });
+    return { events:events, total:total };
+  }
+
+  function setPlayButton(mode){   // 'play' | 'stop' | 'loading'
+    var b = document.getElementById('play-btn');
+    var playIcon = '<svg class="icon" viewBox="0 0 24 24"><path d="M6 3 L21 12 L6 21Z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>';
+    var stopIcon = '<svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="#fff"/></svg>';
+    b.disabled = (mode === 'loading');
+    b.classList.toggle('stop', mode === 'stop');
+    if(mode === 'play') b.innerHTML = playIcon + '<span>Play</span>';
+    else if(mode === 'stop') b.innerHTML = stopIcon + '<span>Stop</span>';
+    else b.innerHTML = '<span>Loading piano…</span>';
+  }
+
+  function stopPlayback(){
+    player.token++;
+    player.timers.forEach(clearTimeout);
+    player.timers = [];
+    player.sounding.forEach(function(note){ soundOff(note); lightOff(note); });
+    player.sounding = [];
+    Object.keys(keyEls).forEach(lightOff);
+    Object.keys(fingerEls).forEach(lightOff);
+    player.playing = false;
+    setPlayButton('play');
+  }
+
+  async function startPlayback(){
+    var myToken = ++player.token;
+    setPlayButton('loading');
+    await loadEngine();
+    if(myToken !== player.token) return;   // user left or changed step while loading
+
+    var step = PARTS[current.part].steps[current.step];
+    var built = buildEvents(step);
+    player.playing = true;
+    player.sounding = [];
+    setPlayButton('stop');
+
+    built.events.forEach(function(ev){
+      var onT = setTimeout(function(){
+        lightOn(ev.note, ev.hand);
+        soundOn(ev.note);
+        player.sounding.push(ev.note);
+      }, ev.start * 1000);
+      var offT = setTimeout(function(){
+        soundOff(ev.note);
+        lightOff(ev.note);
+        var i = player.sounding.indexOf(ev.note);
+        if(i >= 0) player.sounding.splice(i, 1);
+      }, (ev.end - GAP) * 1000);
+      player.timers.push(onT, offT);
+    });
+    player.timers.push(setTimeout(function(){
+      if(myToken !== player.token) return;
+      stopPlayback();
+    }, built.total * 1000 + 80));
+  }
+
+  // ================= Screens + step navigation =================
+  var current = { part:1, step:0 };
+
+  function showScreen(id){
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    if(id === 'screen-practice') fitStage();
+  }
+
+  function renderStep(){
+    var part = PARTS[current.part];
+    var total = part.steps.length;
+    document.getElementById('part-title').textContent = part.title;
+    document.getElementById('step-label').textContent = 'Step ' + (current.step + 1) + ' of ' + total;
+
+    var dots = document.getElementById('step-dots');
+    dots.innerHTML = '';
+    for(var i = 0; i < total; i++){
+      var d = document.createElement('div');
+      d.className = 'dot' + (i < current.step ? ' done' : (i === current.step ? ' now' : ''));
+      dots.appendChild(d);
+    }
+
+    var next = document.getElementById('next-btn');
+    var last = current.step === total - 1;
+    next.textContent = last ? 'Done practicing this part!' : 'Next step';
+    next.classList.toggle('done', last);
+
+    setPlayButton('play');
+  }
+
+  function startPart(n){
+    stopPlayback();
+    current.part = n;
+    current.step = 0;
+    renderStep();
+    showScreen('screen-practice');
+  }
+
+  function goHome(){
+    stopPlayback();
+    showScreen('screen-home');
+  }
+
+  function fitStage(){
+    var scaleBox = document.getElementById('stage-scale');
+    var stage = document.getElementById('stage');
+    var avail = scaleBox.clientWidth;
+    if(!avail) return;
+    var scale = Math.min(1, avail / 720);
+    stage.style.transform = 'scale(' + scale + ')';
+    scaleBox.style.height = (stage.offsetHeight * scale) + 'px';
+  }
+
+  // ================= Wiring =================
+  document.querySelectorAll('.part-btn').forEach(function(b){
+    b.addEventListener('click', function(){ startPart(parseInt(b.getAttribute('data-part'), 10)); });
+  });
+  document.getElementById('back-btn').addEventListener('click', goHome);
+  document.getElementById('play-btn').addEventListener('click', function(){
+    if(player.playing) stopPlayback(); else startPlayback();
+  });
+  document.getElementById('next-btn').addEventListener('click', function(){
+    var total = PARTS[current.part].steps.length;
+    if(current.step >= total - 1){ goHome(); return; }
+    stopPlayback();
+    current.step++;
+    renderStep();
+  });
+  window.addEventListener('resize', fitStage);
+
+  renderKeyboard();
+  renderHands();
+  setPlayButton('play');
+})();
+</script>
+</body>
+</html>
