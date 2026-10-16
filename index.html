@@ -29,22 +29,25 @@
     --key-black:#3A2F66;
   }
   *{ margin:0; padding:0; box-sizing:border-box; }
+  html, body{
+    height:100%;
+    overflow:hidden;
+  }
   body{
     font-family:'Nunito', sans-serif;
     background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
     background-attachment: fixed;
     color: var(--ink);
-    min-height:100vh;
   }
-  #app{ width:100%; min-height:100vh; display:flex; flex-direction:column; }
-  .screen{ display:none; flex:1; flex-direction:column; }
+  #app{ width:100%; height:100%; display:flex; flex-direction:column; }
+  .screen{ display:none; flex:1; flex-direction:column; min-height:0; }
   .screen.active{ display:flex; animation: rise .4s cubic-bezier(.2,.7,.3,1); }
   @keyframes rise{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform:none; } }
 
   h1{ font-family:'Baloo 2', sans-serif; font-weight:800; font-size:2.8rem; letter-spacing:-0.01em; color: var(--coral-deep); text-shadow: 0 3px 0 #fff; line-height:1.1; }
 
   /* ---------- Home ---------- */
-  #screen-home{ padding: 28px 20px 40px; max-width: 640px; margin:0 auto; width:100%; align-items:center; }
+  #screen-home{ padding: 28px 20px 40px; max-width: 640px; margin:0 auto; width:100%; align-items:center; overflow:auto; }
   .home-header{ text-align:center; margin-bottom: 8px; }
   .swan-pic{ width:100%; max-width:520px; border-radius:28px; border:5px solid #fff; box-shadow: 0 8px 0 rgba(43,34,80,.18); overflow:hidden; margin: 14px 0 26px; background:#fff; }
   .swan-pic img{ display:block; width:100%; height:auto; }
@@ -66,8 +69,8 @@
   .part-btn.p4:active{ box-shadow: 0 2px 0 var(--grape-deep); }
 
   /* ---------- Practice screen ---------- */
-  #screen-practice{ padding: 14px 14px 24px; max-width: 900px; margin:0 auto; width:100%; }
-  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 8px; }
+  #screen-practice{ padding: 10px 14px 16px; max-width: 900px; margin:0 auto; width:100%; min-height:0; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 4px; flex-shrink:0; }
   .back-btn{ background:#fff; border:3px solid var(--sun); color: var(--coral-deep); font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1rem; border-radius:999px; padding:6px 16px; cursor:pointer; }
   .back-btn:hover{ background:#FFF6D6; }
   .title-wrap{ text-align:center; flex:1; }
@@ -78,9 +81,9 @@
   .dot.now{ background: var(--sun); transform: scale(1.3); }
   .topbar .spacer{ width:92px; }
 
-  .step-label{ text-align:center; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.3rem; color: var(--ink); margin: 2px 0 8px; }
+  .step-label{ text-align:center; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.3rem; color: var(--ink); margin: 2px 0 6px; flex-shrink:0; }
 
-  .play-row{ display:flex; justify-content:center; margin-bottom: 14px; }
+  .play-row{ display:flex; justify-content:center; margin-bottom: 10px; flex-shrink:0; }
   .play-btn{
     font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.4rem; color:#fff;
     border:none; border-radius:999px; padding: 12px 34px; cursor:pointer;
@@ -93,9 +96,16 @@
   .play-btn[disabled]{ opacity:.7; cursor:wait; }
   .play-btn .icon{ width:22px; height:22px; display:block; }
 
-  .stage-box{ background: rgba(255,255,255,.55); border:4px solid #fff; border-radius:26px; padding: 14px 8px 6px; box-shadow: 0 6px 0 rgba(43,34,80,.14); }
-  #stage-scale{ width:100%; overflow:hidden; position:relative; }
-  #stage{ width:720px; position:relative; transform-origin: top left; }
+  .stage-box{
+    background: rgba(255,255,255,.55); border:4px solid #fff; border-radius:26px;
+    padding: 10px 8px 4px; box-shadow: 0 6px 0 rgba(43,34,80,.14);
+    flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  }
+  #stage-scale{
+    width:100%; flex: 1; min-height: 0; overflow:hidden; position:relative;
+    display:flex; justify-content:center; align-items:center;
+  }
+  #stage{ width:720px; position:relative; transform-origin: top center; }
 
   /* keyboard (same construction as the Treble Clef Game) */
   #keys{ position:relative; width:720px; height:200px; background: linear-gradient(180deg,#FFE9BE 0%,#FFD98F 100%); border-radius: 0 0 14px 14px; }
@@ -119,7 +129,7 @@
   .finger.lit-R{ opacity:1; color:var(--right-light); }
   .hand-tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:20px; fill: var(--ink-soft); text-anchor:middle; }
 
-  .bottom-row{ display:flex; align-items:center; justify-content:flex-end; gap:16px; margin-top:16px; flex-wrap:wrap; }
+  .bottom-row{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:12px; flex-wrap:wrap; flex-shrink:0; }
   .practice-text{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.25rem; color: var(--ink); background:#fff; border:3px solid var(--sun); border-radius:18px; padding:8px 16px; }
   .next-btn{
     font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.2rem; color:#fff;
@@ -130,12 +140,11 @@
   .next-btn:active{ transform: translateY(4px); box-shadow: 0 2px 0 var(--grape-deep); }
   .next-btn.done{ background: var(--sun-deep); box-shadow: 0 6px 0 #C47F0E; color: var(--ink); }
   .next-btn.done:active{ box-shadow: 0 2px 0 #C47F0E; }
-  .sound-note{ text-align:center; font-weight:700; font-size:.85rem; color: var(--ink-soft); margin-top:10px; min-height:1.2em; }
+  .sound-note{ text-align:center; font-weight:700; font-size:.85rem; color: var(--ink-soft); margin-top:6px; min-height:1.2em; flex-shrink:0; }
 
   @media (max-width:520px){
     h1{ font-size:2.1rem; }
     .topbar .spacer{ display:none; }
-    .bottom-row{ justify-content:center; }
   }
 </style>
 </head>
@@ -535,11 +544,19 @@
   function fitStage(){
     var scaleBox = document.getElementById('stage-scale');
     var stage = document.getElementById('stage');
-    var avail = scaleBox.clientWidth;
-    if(!avail) return;
-    var scale = Math.min(1, avail / 720);
+    if(!scaleBox.clientWidth || !scaleBox.clientHeight) return;
+
+    // Measure natural size (reset any previous scale)
+    stage.style.transform = 'none';
+    var naturalW = 720;
+    var naturalH = stage.offsetHeight || 536;
+
+    var scaleW = scaleBox.clientWidth / naturalW;
+    var scaleH = scaleBox.clientHeight / naturalH;
+    var scale = Math.min(1, scaleW, scaleH);
+
+    stage.style.transformOrigin = 'top center';
     stage.style.transform = 'scale(' + scale + ')';
-    scaleBox.style.height = (stage.offsetHeight * scale) + 'px';
   }
 
   // ================= Wiring =================
