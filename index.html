@@ -62,11 +62,13 @@
   .part-btn.p2{ background: var(--sea);    box-shadow: 0 7px 0 var(--sea-deep); }
   .part-btn.p3{ background: var(--mint);   box-shadow: 0 7px 0 var(--mint-deep); }
   .part-btn.p4{ background: var(--grape);  box-shadow: 0 7px 0 var(--grape-deep); }
+  .part-btn.p5{ background: var(--sun-deep); box-shadow: 0 7px 0 #C47F0E; grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); }
   .part-btn:hover{ filter: brightness(1.07); }
   .part-btn.p1:active{ box-shadow: 0 2px 0 var(--coral-deep); }
   .part-btn.p2:active{ box-shadow: 0 2px 0 var(--sea-deep); }
   .part-btn.p3:active{ box-shadow: 0 2px 0 var(--mint-deep); }
   .part-btn.p4:active{ box-shadow: 0 2px 0 var(--grape-deep); }
+  .part-btn.p5:active{ box-shadow: 0 2px 0 #C47F0E; }
 
   /* ---------- Practice screen ---------- */
   #screen-practice{ padding: 10px 14px 16px; max-width: 900px; margin:0 auto; width:100%; min-height:0; }
@@ -164,6 +166,7 @@
       <button class="part-btn p2" data-part="2">Part 2</button>
       <button class="part-btn p3" data-part="3">Part 3</button>
       <button class="part-btn p4" data-part="4">Part 4</button>
+      <button class="part-btn p5" data-part="5">Part 5</button>
     </div>
   </section>
 
@@ -207,6 +210,7 @@
   // ================= Music data =================
   // Each hand is a list of [note, seconds]; all notes in a hand play one after another from t = 0.
   var RH_PART1 = ['E4','G4','F4','E4','G4','F4','E4','G4','F4','E4','D4','C4'];
+  var RH_PART5 = ['E4','D4','C4','E4','D4','C4'];
   function rhOnes(list){ return list.map(function(n){ return [n,1]; }); }
 
   var PARTS = {
@@ -232,6 +236,11 @@
       { rh: rhOnes(['D4','E4','F4']),                          lh: [['G3',3]] },
       { rh: rhOnes(['D4','E4','F4','D4']),                     lh: [['G3',3],['G3',1]] },
       { rh: rhOnes(['D4','E4','F4','D4','E4','F4']),           lh: [['G3',3],['G3',3]] }
+    ]},
+    5: { title:'Part 5', steps: [
+      { rh: rhOnes(RH_PART5.slice(0,3)),  lh: [['C3',3]] },
+      { rh: rhOnes(RH_PART5.slice(0,4)),  lh: [['C3',3],['E3',1]] },
+      { rh: rhOnes(RH_PART5.slice(0,6)),  lh: [['C3',3],['E3',3]] }
     ]}
   };
 
