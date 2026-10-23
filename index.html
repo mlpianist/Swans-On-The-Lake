@@ -53,8 +53,14 @@
   /* ---------- Home ---------- */
   #screen-home{ padding: 28px 20px 40px; max-width: 640px; margin:0 auto; width:100%; align-items:center; overflow:auto; }
   .home-header{ text-align:center; margin-bottom: 8px; }
-  .swan-pic{ width:100%; max-width:520px; border-radius:28px; border:5px solid #fff; box-shadow: 0 8px 0 rgba(43,34,80,.18); overflow:hidden; margin: 14px 0 26px; background:#fff; }
-  .swan-pic img{ display:block; width:100%; height:auto; }
+  .swan-pic{ aspect-ratio: 3 / 2; width:100%; max-width:520px; border-radius:28px; border:5px solid #fff; box-shadow: 0 8px 0 rgba(43,34,80,.18); overflow:hidden; margin: 14px 0 26px; background:#fff; }
+  .swan-pic img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;        /* fills the frame, cropping evenly from the edges */
+    object-position:center;  /* keeps the middle of the photo centered */
+  }
   .part-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; width:100%; max-width:520px; }
   .part-btn{
     font-family:'Baloo 2', sans-serif; font-weight:800; font-size:1.5rem; color:#fff;
