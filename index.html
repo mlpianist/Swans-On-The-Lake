@@ -22,6 +22,10 @@
     --grape-deep:#7A2FDB;
     --sea:#1EA7F2;
     --sea-deep:#0D7FC4;
+    --teal:#14B8C6;
+    --teal-deep:#0C8D99;
+    --pink:#FF6FB5;
+    --pink-deep:#D6408A;
     --left-light:#FF5A3C;
     --right-light:#9B4DFF;
     --key-white:#FFFDF7;
@@ -62,13 +66,17 @@
   .part-btn.p2{ background: var(--sea);    box-shadow: 0 7px 0 var(--sea-deep); }
   .part-btn.p3{ background: var(--mint);   box-shadow: 0 7px 0 var(--mint-deep); }
   .part-btn.p4{ background: var(--grape);  box-shadow: 0 7px 0 var(--grape-deep); }
-  .part-btn.p5{ background: var(--sun-deep); box-shadow: 0 7px 0 #C47F0E; grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); }
+  .part-btn.p5{ background: var(--sun-deep); box-shadow: 0 7px 0 #C47F0E; }
+  .part-btn.p6{ background: var(--teal);   box-shadow: 0 7px 0 var(--teal-deep); }
+  .part-btn.p7{ background: var(--pink);   box-shadow: 0 7px 0 var(--pink-deep); grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); }
   .part-btn:hover{ filter: brightness(1.07); }
   .part-btn.p1:active{ box-shadow: 0 2px 0 var(--coral-deep); }
   .part-btn.p2:active{ box-shadow: 0 2px 0 var(--sea-deep); }
   .part-btn.p3:active{ box-shadow: 0 2px 0 var(--mint-deep); }
   .part-btn.p4:active{ box-shadow: 0 2px 0 var(--grape-deep); }
   .part-btn.p5:active{ box-shadow: 0 2px 0 #C47F0E; }
+  .part-btn.p6:active{ box-shadow: 0 2px 0 var(--teal-deep); }
+  .part-btn.p7:active{ box-shadow: 0 2px 0 var(--pink-deep); }
 
   /* ---------- Practice screen ---------- */
   #screen-practice{ padding: 10px 14px 16px; max-width: 900px; margin:0 auto; width:100%; min-height:0; }
@@ -167,6 +175,8 @@
       <button class="part-btn p3" data-part="3">Part 3</button>
       <button class="part-btn p4" data-part="4">Part 4</button>
       <button class="part-btn p5" data-part="5">Part 5</button>
+      <button class="part-btn p6" data-part="6">Part 6</button>
+      <button class="part-btn p7" data-part="7">Part 7</button>
     </div>
   </section>
 
@@ -241,6 +251,17 @@
       { rh: rhOnes(RH_PART5.slice(0,3)),  lh: [['C3',3]] },
       { rh: rhOnes(RH_PART5.slice(0,4)),  lh: [['C3',3],['E3',1]] },
       { rh: rhOnes(RH_PART5.slice(0,6)),  lh: [['C3',3],['E3',3]] }
+    ]},
+    6: { title:'Part 6', steps: [
+      { rh: rhOnes(['E4','D4']),                               lh: [['C3',2]] },
+      { rh: rhOnes(['E4','D4','C4']),                          lh: [['C3',2],['E3',1]] },
+      { rh: rhOnes(['E4','D4','C4']).concat([['D4',3]]),       lh: [['C3',2],['E3',1],['G3',3]] }
+    ]},
+    7: { title:'Part 7', steps: [
+      { rh: [['D4',2]],                                        lh: [['F3',2]] },
+      { rh: [['D4',1],['E4',2]],                               lh: [['F3',1],['G3',2]] },
+      { rh: [['D4',1],['E4',1],['D4',2]],                      lh: [['F3',1],['G3',1],['F3',2]] },
+      { rh: [['D4',1],['E4',1],['D4',1],['C4',3]],             lh: [['F3',1],['G3',1],['F3',1],['E3',3]] }
     ]}
   };
 
